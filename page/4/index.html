@@ -602,6 +602,155 @@
 
 
   
+    <article id="post-2017-02-24-lesson13" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/18/2017-02-24-lesson13/">渲染列表数据</a>
+    </h1>
+  
+
+        
+        <a href="/2019/06/18/2017-02-24-lesson13/" class="archive-article-date">
+  	<time datetime="2019-06-18T15:45:21.623Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul style="font-size: 14px; margin-top: -10px;">
+  <li>
+    作者：<a href="https://www.zhihu.com/people/hu-zi-da-ha" target="_blank">胡子大哈</a>
+  </li>
+  <li>
+    原文链接：<a href="http://huziketang.com/books/react" target="_blank" rel="noopener"> http://huziketang.com/books/react </a>
+  </li>
+  <li>转载请注明出处，保留原文链接和作者信息。</li>
+</ul>
+
+<p>列表数据在前端非常常见，我们经常要处理这种类型的数据，例如文章列表、评论列表、用户列表…一个前端工程师几乎每天都需要跟列表数据打交道。</p>
+<p>React.js 当然也允许我们处理列表数据，但在使用 React.js 处理列表数据的时候，需要掌握一些规则。我们这一节会专门讨论这方面的知识。</p>
+<h2 id="渲染存放-JSX-元素的数组"><a href="#渲染存放-JSX-元素的数组" class="headerlink" title="渲染存放 JSX 元素的数组"></a>渲染存放 JSX 元素的数组</h2><p>假设现在我们有这么一个用户列表数据，存放在一个数组当中：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Jerry'</span>, <span class="attr">age</span>: <span class="number">21</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Tomy'</span>, <span class="attr">age</span>: <span class="number">22</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lily'</span>, <span class="attr">age</span>: <span class="number">19</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lucy'</span>, <span class="attr">age</span>: <span class="number">20</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>如果现在要把这个数组里面的数据渲染页面上要怎么做？开始之前要补充一个知识。之前说过 JSX 的表达式插入 <code>{}</code> 里面可以放任何数据，如果我们往 <code>{}</code> 里面放一个存放 JSX 元素的数组会怎么样？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;[</span><br><span class="line">          &lt;span&gt;React.js &lt;<span class="regexp">/span&gt;,</span></span><br><span class="line"><span class="regexp">          &lt;span&gt;is &lt;/</span>span&gt;,</span><br><span class="line">          &lt;span&gt;good&lt;<span class="regexp">/span&gt;</span></span><br><span class="line"><span class="regexp">        ]&#125;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;Index /&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>我们往 JSX 里面塞了一个数组，这个数组里面放了一些 JSX 元素（其实就是 JavaScript 对象）。到浏览器中，你在页面上会看到：</p>
+<p><a href="http://huzidaha.github.io/static/assets/img/posts/3ADE3817-7D91-4462-830D-1802D8345326.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/3ADE3817-7D91-4462-830D-1802D8345326.png" alt="React.js 小书渲染列表数据图片"></a></p>
+<p>审查一下元素，看看会发现什么：</p>
+<p><a href="http://huzidaha.github.io/static/assets/img/posts/05FD6746-FEF5-4253-9802-EB563643DEDC.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/05FD6746-FEF5-4253-9802-EB563643DEDC.png" alt="React.js 小书渲染列表数据图片"></a></p>
+<p>React.js 把插入表达式数组里面的每一个 JSX 元素一个个罗列下来，渲染到页面上。所以这里有个关键点：<em>如果你往 <code>{}</code> 放一个数组，React.js 会帮你把数组里面一个个元素罗列并且渲染出来</em>。</p>
+<h2 id="使用-map-渲染列表数据"><a href="#使用-map-渲染列表数据" class="headerlink" title="使用 map 渲染列表数据"></a>使用 map 渲染列表数据</h2><p>知道这一点以后你就可以知道怎么用循环把元素渲染到页面上：循环上面用户数组里面的每一个用户，为每个用户数据构建一个 JSX，然后把 JSX 放到一个新的数组里面，再把新的数组插入 <code>render</code> 方法的 JSX 里面。看看代码怎么写：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Jerry'</span>, <span class="attr">age</span>: <span class="number">21</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Tomy'</span>, <span class="attr">age</span>: <span class="number">22</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lily'</span>, <span class="attr">age</span>: <span class="number">19</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lucy'</span>, <span class="attr">age</span>: <span class="number">20</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">const</span> usersElements = [] <span class="comment">// 保存每个用户渲染以后 JSX 的数组</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> user <span class="keyword">of</span> users) &#123;</span><br><span class="line">      usersElements.push( <span class="comment">// 循环每个用户，构建 JSX，push 到数组中</span></span><br><span class="line">        &lt;div&gt;</span><br><span class="line">          &lt;div&gt;姓名：&#123;user.username&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">          &lt;div&gt;年龄：&#123;user.age&#125;&lt;/</span>div&gt;</span><br><span class="line">          &lt;div&gt;性别：&#123;user.gender&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">          &lt;hr /</span>&gt;</span><br><span class="line">        &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;&#123;usersElements&#125;&lt;/</span>div&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;Index /&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>这里用了一个新的数组 <code>usersElements</code>，然后循环 <code>users</code> 数组，为每个 <code>user</code> 构建一个 JSX 结构，然后 push 到 <code>usersElements</code> 中。然后直接用表达式插入，把这个 <code>userElements</code> 插到 return 的 JSX 当中。因为 React.js 会自动化帮我们把数组当中的 JSX 罗列渲染出来，所以可以看到页面上显示：</p>
+<p><a href="http://huzidaha.github.io/static/assets/img/posts/AABC1755-55EA-4E42-8763-A15234DB1F02.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/AABC1755-55EA-4E42-8763-A15234DB1F02.png" alt="React.js 小书渲染列表数据图片"></a></p>
+<p>但我们一般不会手动写循环来构建列表的 JSX 结构，可以直接用 ES6 自带的 <code>map</code>（不了解 <code>map</code> 函数的同学可以先了解相关的知识再来回顾这里），代码可以简化成：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;users.map(<span class="function">(<span class="params">user</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> (</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">              &lt;div&gt;姓名：&#123;user.username&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">              &lt;div&gt;年龄：&#123;user.age&#125;&lt;/</span>div&gt;</span><br><span class="line">              &lt;div&gt;性别：&#123;user.gender&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">              &lt;hr /</span>&gt;</span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">          )</span></span><br><span class="line"><span class="regexp">        &#125;)&#125;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样的模式在 JavaScript 中非常常见，一般来说，在 React.js 处理列表就是用 <code>map</code> 来处理、渲染的。现在进一步把渲染单独一个用户的结构抽离出来作为一个组件，继续优化代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Jerry'</span>, <span class="attr">age</span>: <span class="number">21</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Tomy'</span>, <span class="attr">age</span>: <span class="number">22</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lily'</span>, <span class="attr">age</span>: <span class="number">19</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lucy'</span>, <span class="attr">age</span>: <span class="number">20</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; user &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;div&gt;姓名：&#123;user.username&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        &lt;div&gt;年龄：&#123;user.age&#125;&lt;/</span>div&gt;</span><br><span class="line">        &lt;div&gt;性别：&#123;user.gender&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        &lt;hr /</span>&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class Index extends Component &#123;</span></span><br><span class="line"><span class="regexp">  render () &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;</span></span><br><span class="line"><span class="regexp">        &#123;users.map((user) =&gt; &lt;User user=&#123;user&#125; /</span>&gt;)&#125;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">  &lt;Index /</span>&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>这里把负责展示用户数据的 JSX 结构抽离成一个组件 <code>User</code> ，并且通过 <code>props</code> 把 <code>user</code> 数据作为组件的配置参数传进去；这样改写 <code>Index</code> 就非常清晰了，看一眼就知道负责渲染 <code>users</code> 列表，而用的组件是 <code>User</code>。</p>
+<h2 id="key-key-key"><a href="#key-key-key" class="headerlink" title="key! key! key!"></a>key! key! key!</h2><p>现在代码运作正常，好像没什么问题。打开控制台看看：</p>
+<p><a href="http://huzidaha.github.io/static/assets/img/posts/85CA5037-99C1-422C-99A4-AADA978C6801.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/85CA5037-99C1-422C-99A4-AADA978C6801.png" alt="React.js 小书渲染列表数据图片"></a></p>
+<p>React.js 报错了。如果需要详细解释这里报错的原因，估计要单独写半本书。但可以简单解释一下。</p>
+<p>React.js 的是非常高效的，它高效依赖于所谓的 Virtual-DOM 策略。简单来说，能复用的话 React.js 就会尽量复用，没有必要的话绝对不碰 DOM。对于列表元素来说也是这样，但是处理列表元素的复用性会有一个问题：元素可能会在一个列表中改变位置。例如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>a<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>b<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>c<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>假设页面上有这么3个列表元素，现在改变一下位置：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>a<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>c<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>b<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>c</code> 和 <code>b</code> 的位置互换了。但其实 React.js 只需要交换一下 DOM 位置就行了，但是它并不知道其实我们只是改变了元素的位置，所以它会重新渲染后面两个元素（再执行 Virtual-DOM 策略），这样会大大增加 DOM 操作。但如果给每个元素加上唯一的标识，React.js 就可以知道这两个元素只是交换了位置：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">key</span>=<span class="string">'a'</span>&gt;</span>a<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">key</span>=<span class="string">'b'</span>&gt;</span>b<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">key</span>=<span class="string">'c'</span>&gt;</span>c<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这样 React.js 就简单的通过 <code>key</code> 来判断出来，这两个列表元素只是交换了位置，可以尽量复用元素内部的结构。</p>
+<p>这里没听懂没有关系，后面有机会会继续讲解这部分内容。现在只需要记住一个简单的规则：<em>对于用表达式套数组罗列到页面上的元素，都要为每个元素加上 <code>key</code>  属性，这个 <code>key</code> 必须是每个元素唯一的标识</em>。一般来说，<code>key</code> 的值可以直接后台数据返回的 <code>id</code>，因为后台的 <code>id</code> 都是唯一的。</p>
+<p>在上面的例子当中，每个 <code>user</code> 没有 <code>id</code> 可以用，可以直接用循环计数器 <code>i</code> 作为 <code>key</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;users.map(<span class="function">(<span class="params">user, i</span>) =&gt;</span> <span class="xml"><span class="tag">&lt;<span class="name">User</span> <span class="attr">key</span>=<span class="string">&#123;i&#125;</span> <span class="attr">user</span>=<span class="string">&#123;user&#125;</span> /&gt;</span>)&#125;</span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>再看看，控制台已经没有错误信息了。但这是不好的做法，这只是掩耳盗铃（具体原因大家可以自己思考一下）。记住一点：在实际项目当中，如果你的数据顺序可能发生变化，标准做法是最好是后台数据返回的 <code>id</code> 作为列表元素的 <code>key</code>。</p>
+<h2 id="课后练习"><a href="#课后练习" class="headerlink" title="课后练习"></a>课后练习</h2><ul>
+<li><a target="_blank" href="http://scriptoj.com/problems/8">打印章节标题</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>因为第三方评论工具有问题，对本章节有任何疑问的朋友可以移步到 <a target="_blank" href="http://scriptoj.com/category/4/react-js-小书交流区">React.js 小书的论坛</a> 发帖，我会回答大家的疑问。</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">React.js</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">React.js 小书</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">教程</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JSX</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">列表数据</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/06/18/2017-02-24-lesson13/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-2017-02-22-lesson11" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -789,155 +938,6 @@ undefined
 
 
   
-    <article id="post-2017-02-24-lesson13" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/18/2017-02-24-lesson13/">渲染列表数据</a>
-    </h1>
-  
-
-        
-        <a href="/2019/06/18/2017-02-24-lesson13/" class="archive-article-date">
-  	<time datetime="2019-06-18T15:45:21.623Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul style="font-size: 14px; margin-top: -10px;">
-  <li>
-    作者：<a href="https://www.zhihu.com/people/hu-zi-da-ha" target="_blank">胡子大哈</a>
-  </li>
-  <li>
-    原文链接：<a href="http://huziketang.com/books/react" target="_blank" rel="noopener"> http://huziketang.com/books/react </a>
-  </li>
-  <li>转载请注明出处，保留原文链接和作者信息。</li>
-</ul>
-
-<p>列表数据在前端非常常见，我们经常要处理这种类型的数据，例如文章列表、评论列表、用户列表…一个前端工程师几乎每天都需要跟列表数据打交道。</p>
-<p>React.js 当然也允许我们处理列表数据，但在使用 React.js 处理列表数据的时候，需要掌握一些规则。我们这一节会专门讨论这方面的知识。</p>
-<h2 id="渲染存放-JSX-元素的数组"><a href="#渲染存放-JSX-元素的数组" class="headerlink" title="渲染存放 JSX 元素的数组"></a>渲染存放 JSX 元素的数组</h2><p>假设现在我们有这么一个用户列表数据，存放在一个数组当中：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Jerry'</span>, <span class="attr">age</span>: <span class="number">21</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Tomy'</span>, <span class="attr">age</span>: <span class="number">22</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lily'</span>, <span class="attr">age</span>: <span class="number">19</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lucy'</span>, <span class="attr">age</span>: <span class="number">20</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p>如果现在要把这个数组里面的数据渲染页面上要怎么做？开始之前要补充一个知识。之前说过 JSX 的表达式插入 <code>{}</code> 里面可以放任何数据，如果我们往 <code>{}</code> 里面放一个存放 JSX 元素的数组会怎么样？</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;[</span><br><span class="line">          &lt;span&gt;React.js &lt;<span class="regexp">/span&gt;,</span></span><br><span class="line"><span class="regexp">          &lt;span&gt;is &lt;/</span>span&gt;,</span><br><span class="line">          &lt;span&gt;good&lt;<span class="regexp">/span&gt;</span></span><br><span class="line"><span class="regexp">        ]&#125;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;Index /&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p>我们往 JSX 里面塞了一个数组，这个数组里面放了一些 JSX 元素（其实就是 JavaScript 对象）。到浏览器中，你在页面上会看到：</p>
-<p><a href="http://huzidaha.github.io/static/assets/img/posts/3ADE3817-7D91-4462-830D-1802D8345326.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/3ADE3817-7D91-4462-830D-1802D8345326.png" alt="React.js 小书渲染列表数据图片"></a></p>
-<p>审查一下元素，看看会发现什么：</p>
-<p><a href="http://huzidaha.github.io/static/assets/img/posts/05FD6746-FEF5-4253-9802-EB563643DEDC.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/05FD6746-FEF5-4253-9802-EB563643DEDC.png" alt="React.js 小书渲染列表数据图片"></a></p>
-<p>React.js 把插入表达式数组里面的每一个 JSX 元素一个个罗列下来，渲染到页面上。所以这里有个关键点：<em>如果你往 <code>{}</code> 放一个数组，React.js 会帮你把数组里面一个个元素罗列并且渲染出来</em>。</p>
-<h2 id="使用-map-渲染列表数据"><a href="#使用-map-渲染列表数据" class="headerlink" title="使用 map 渲染列表数据"></a>使用 map 渲染列表数据</h2><p>知道这一点以后你就可以知道怎么用循环把元素渲染到页面上：循环上面用户数组里面的每一个用户，为每个用户数据构建一个 JSX，然后把 JSX 放到一个新的数组里面，再把新的数组插入 <code>render</code> 方法的 JSX 里面。看看代码怎么写：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Jerry'</span>, <span class="attr">age</span>: <span class="number">21</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Tomy'</span>, <span class="attr">age</span>: <span class="number">22</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lily'</span>, <span class="attr">age</span>: <span class="number">19</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lucy'</span>, <span class="attr">age</span>: <span class="number">20</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">const</span> usersElements = [] <span class="comment">// 保存每个用户渲染以后 JSX 的数组</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> user <span class="keyword">of</span> users) &#123;</span><br><span class="line">      usersElements.push( <span class="comment">// 循环每个用户，构建 JSX，push 到数组中</span></span><br><span class="line">        &lt;div&gt;</span><br><span class="line">          &lt;div&gt;姓名：&#123;user.username&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">          &lt;div&gt;年龄：&#123;user.age&#125;&lt;/</span>div&gt;</span><br><span class="line">          &lt;div&gt;性别：&#123;user.gender&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">          &lt;hr /</span>&gt;</span><br><span class="line">        &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;&#123;usersElements&#125;&lt;/</span>div&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;Index /&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p>这里用了一个新的数组 <code>usersElements</code>，然后循环 <code>users</code> 数组，为每个 <code>user</code> 构建一个 JSX 结构，然后 push 到 <code>usersElements</code> 中。然后直接用表达式插入，把这个 <code>userElements</code> 插到 return 的 JSX 当中。因为 React.js 会自动化帮我们把数组当中的 JSX 罗列渲染出来，所以可以看到页面上显示：</p>
-<p><a href="http://huzidaha.github.io/static/assets/img/posts/AABC1755-55EA-4E42-8763-A15234DB1F02.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/AABC1755-55EA-4E42-8763-A15234DB1F02.png" alt="React.js 小书渲染列表数据图片"></a></p>
-<p>但我们一般不会手动写循环来构建列表的 JSX 结构，可以直接用 ES6 自带的 <code>map</code>（不了解 <code>map</code> 函数的同学可以先了解相关的知识再来回顾这里），代码可以简化成：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;users.map(<span class="function">(<span class="params">user</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> (</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">              &lt;div&gt;姓名：&#123;user.username&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">              &lt;div&gt;年龄：&#123;user.age&#125;&lt;/</span>div&gt;</span><br><span class="line">              &lt;div&gt;性别：&#123;user.gender&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">              &lt;hr /</span>&gt;</span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">          )</span></span><br><span class="line"><span class="regexp">        &#125;)&#125;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这样的模式在 JavaScript 中非常常见，一般来说，在 React.js 处理列表就是用 <code>map</code> 来处理、渲染的。现在进一步把渲染单独一个用户的结构抽离出来作为一个组件，继续优化代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Jerry'</span>, <span class="attr">age</span>: <span class="number">21</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Tomy'</span>, <span class="attr">age</span>: <span class="number">22</span>, <span class="attr">gender</span>: <span class="string">'male'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lily'</span>, <span class="attr">age</span>: <span class="number">19</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">username</span>: <span class="string">'Lucy'</span>, <span class="attr">age</span>: <span class="number">20</span>, <span class="attr">gender</span>: <span class="string">'female'</span> &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; user &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;div&gt;姓名：&#123;user.username&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        &lt;div&gt;年龄：&#123;user.age&#125;&lt;/</span>div&gt;</span><br><span class="line">        &lt;div&gt;性别：&#123;user.gender&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        &lt;hr /</span>&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">class Index extends Component &#123;</span></span><br><span class="line"><span class="regexp">  render () &#123;</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;</span></span><br><span class="line"><span class="regexp">        &#123;users.map((user) =&gt; &lt;User user=&#123;user&#125; /</span>&gt;)&#125;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">  &lt;Index /</span>&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p>这里把负责展示用户数据的 JSX 结构抽离成一个组件 <code>User</code> ，并且通过 <code>props</code> 把 <code>user</code> 数据作为组件的配置参数传进去；这样改写 <code>Index</code> 就非常清晰了，看一眼就知道负责渲染 <code>users</code> 列表，而用的组件是 <code>User</code>。</p>
-<h2 id="key-key-key"><a href="#key-key-key" class="headerlink" title="key! key! key!"></a>key! key! key!</h2><p>现在代码运作正常，好像没什么问题。打开控制台看看：</p>
-<p><a href="http://huzidaha.github.io/static/assets/img/posts/85CA5037-99C1-422C-99A4-AADA978C6801.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/85CA5037-99C1-422C-99A4-AADA978C6801.png" alt="React.js 小书渲染列表数据图片"></a></p>
-<p>React.js 报错了。如果需要详细解释这里报错的原因，估计要单独写半本书。但可以简单解释一下。</p>
-<p>React.js 的是非常高效的，它高效依赖于所谓的 Virtual-DOM 策略。简单来说，能复用的话 React.js 就会尽量复用，没有必要的话绝对不碰 DOM。对于列表元素来说也是这样，但是处理列表元素的复用性会有一个问题：元素可能会在一个列表中改变位置。例如：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>a<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>b<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>c<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>假设页面上有这么3个列表元素，现在改变一下位置：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>a<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>c<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>b<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><code>c</code> 和 <code>b</code> 的位置互换了。但其实 React.js 只需要交换一下 DOM 位置就行了，但是它并不知道其实我们只是改变了元素的位置，所以它会重新渲染后面两个元素（再执行 Virtual-DOM 策略），这样会大大增加 DOM 操作。但如果给每个元素加上唯一的标识，React.js 就可以知道这两个元素只是交换了位置：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">key</span>=<span class="string">'a'</span>&gt;</span>a<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">key</span>=<span class="string">'b'</span>&gt;</span>b<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">key</span>=<span class="string">'c'</span>&gt;</span>c<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这样 React.js 就简单的通过 <code>key</code> 来判断出来，这两个列表元素只是交换了位置，可以尽量复用元素内部的结构。</p>
-<p>这里没听懂没有关系，后面有机会会继续讲解这部分内容。现在只需要记住一个简单的规则：<em>对于用表达式套数组罗列到页面上的元素，都要为每个元素加上 <code>key</code>  属性，这个 <code>key</code> 必须是每个元素唯一的标识</em>。一般来说，<code>key</code> 的值可以直接后台数据返回的 <code>id</code>，因为后台的 <code>id</code> 都是唯一的。</p>
-<p>在上面的例子当中，每个 <code>user</code> 没有 <code>id</code> 可以用，可以直接用循环计数器 <code>i</code> 作为 <code>key</code>：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;users.map(<span class="function">(<span class="params">user, i</span>) =&gt;</span> <span class="xml"><span class="tag">&lt;<span class="name">User</span> <span class="attr">key</span>=<span class="string">&#123;i&#125;</span> <span class="attr">user</span>=<span class="string">&#123;user&#125;</span> /&gt;</span>)&#125;</span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>再看看，控制台已经没有错误信息了。但这是不好的做法，这只是掩耳盗铃（具体原因大家可以自己思考一下）。记住一点：在实际项目当中，如果你的数据顺序可能发生变化，标准做法是最好是后台数据返回的 <code>id</code> 作为列表元素的 <code>key</code>。</p>
-<h2 id="课后练习"><a href="#课后练习" class="headerlink" title="课后练习"></a>课后练习</h2><ul>
-<li><a target="_blank" href="http://scriptoj.com/problems/8">打印章节标题</a></li>
-</ul>
-<hr>
-<blockquote>
-<p>因为第三方评论工具有问题，对本章节有任何疑问的朋友可以移步到 <a target="_blank" href="http://scriptoj.com/category/4/react-js-小书交流区">React.js 小书的论坛</a> 发帖，我会回答大家的疑问。</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">React.js</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">React.js 小书</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">教程</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JSX</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">列表数据</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/18/2017-02-24-lesson13/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-2017-02-23-lesson12" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1055,19 +1055,19 @@ undefined
 
 
   
-    <article id="post-2017-02-21-lesson10" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-02-20-lesson9" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/18/2017-02-21-lesson10/">组件的 state 和 setState</a>
+      <a class="article-title" href="/2019/06/18/2017-02-20-lesson9/">事件监听</a>
     </h1>
   
 
         
-        <a href="/2019/06/18/2017-02-21-lesson10/" class="archive-article-date">
+        <a href="/2019/06/18/2017-02-20-lesson9/" class="archive-article-date">
   	<time datetime="2019-06-18T15:45:21.622Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-18</time>
 </a>
         
@@ -1085,38 +1085,37 @@ undefined
   <li>转载请注明出处，保留原文链接和作者信息。</li>
 </ul>
 
-<h2 id="state"><a href="#state" class="headerlink" title="state"></a>state</h2><p>我们前面提到过，一个组件的显示形态是可以由它数据状态和配置参数决定的。一个组件可以拥有自己的状态，就像一个点赞按钮，可以有“已点赞”和“未点赞”状态，并且可以在这两种状态之间进行切换。React.js 的 <code>state</code> 就是用来存储这种可变化的状态的。</p>
-<p><a href="http://huzidaha.github.io/static/assets/img/posts/B7575C67-64F8-4A13-9C63-4D6805FA360D.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/B7575C67-64F8-4A13-9C63-4D6805FA360D.png" alt="React.js 小书教程图片"></a></p>
-<p>我们还是拿点赞按钮做例子，它具有已点赞和未点赞两种状态。那么就可以把这个状态存储在 state 中。修改 <code>src/index.js</code> 为：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./index.css'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LikeButton</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span> () &#123;</span><br><span class="line">    <span class="keyword">super</span>()</span><br><span class="line">    <span class="keyword">this</span>.state = &#123; <span class="attr">isLiked</span>: <span class="literal">false</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleClickOnLikeButton () &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      isLiked: !<span class="keyword">this</span>.state.isLiked</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;button onClick=&#123;<span class="keyword">this</span>.handleClickOnLikeButton.bind(<span class="keyword">this</span>)&#125;&gt;</span><br><span class="line">        &#123;<span class="keyword">this</span>.state.isLiked ? <span class="string">'取消'</span> : <span class="string">'点赞'</span>&#125; 👍</span><br><span class="line">      &lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">...</span></span><br></pre></td></tr></table></figure>
+<p>在 React.js 里面监听事件是很容易的事情，你只需要给需要监听事件的元素加上属性类似于 <code>onClick</code>、<code>onKeyDown</code> 这样的属性，例如我们现在要给 <code>Title</code> 加上点击的事件监听：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Title</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  handleClickOnTitle () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Click on title.'</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;h1 onClick=&#123;<span class="keyword">this</span>.handleClickOnTitle&#125;&gt;React 小书&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<p><code>isLiked</code> 存放在实例的 <code>state</code> 对象当中，这个对象在构造函数里面初始化。这个组件的 <code>render</code> 函数内，会根据组件的 <code>state</code> 的中的<code>isLiked</code>不同显示“取消”或“点赞”内容。并且给 <code>button</code> 加上了点击的事件监听。</p>
-<p>最后构建一个 <code>Index</code> ，在它的 <code>render</code> 函数内使用 <code>LikeButton</code> 。然后把 <code>Index</code> 渲染到页面上：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;LikeButton /&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">  &lt;Index /</span>&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>只需要给 <code>h1</code> 标签加上 <code>onClick</code> 的事件，<code>onClick</code> 紧跟着是一个表达式插入，这个表达式返回一个 <code>Title</code> 自己的一个实例方法。当用户点击 <code>h1</code> 的时候，React.js 就会调用这个方法，所以你在控制台就可以看到 <code>Click on title.</code> 打印出来。</p>
+<p>在 React.js 不需要手动调用浏览器原生的 <code>addEventListener</code> 进行事件监听。React.js 帮我们封装好了一系列的 <code>on*</code> 的属性，当你需要为某个元素监听某个事件的时候，只需要简单地给它加上 <code>on*</code> 就可以了。而且你不需要考虑不同浏览器兼容性的问题，React.js 都帮我们封装好这些细节了。</p>
+<p>React.js 封装了不同类型的事件，这里就不一一列举，有兴趣的同学可以参考官网文档： <a href="https://facebook.github.io/react/docs/events.html#supported-events" target="_blank" rel="noopener">SyntheticEvent - React</a>，多尝试不同的事件。另外要注意的是，这些事件属性名都必须要用驼峰命名法。</p>
+<p>没有经过特殊处理的话，<em>这些 `on</em><code>的事件监听只能用在普通的 HTML 的标签上，而不能用在组件标签上*。也就是说，</code><header onclick="{…}"><code>这样的写法不会有什么效果的。这一点要注意，但是有办法可以做到这样的绑定，以后我们会提及。现在只要记住一点就可以了：这些</code>on*` 的事件监听只能用在普通的 HTML 的标签上，而不能用在组件标签上。</header></p>
+<h2 id="event-对象"><a href="#event-对象" class="headerlink" title="event 对象"></a>event 对象</h2><p>和普通浏览器一样，事件监听函数会被自动传入一个 <code>event</code>  对象，这个对象和普通的浏览器 <code>event</code> 对象所包含的方法和属性都基本一致。不同的是 React.js 中的 <code>event</code> 对象并不是浏览器提供的，而是它自己内部所构建的。React.js 将浏览器原生的 <code>event</code> 对象封装了一下，对外提供统一的 API 和属性，这样你就不用考虑不同浏览器的兼容性问题。这个 <code>event</code> 对象是符合 W3C 标准（ <a href="https://www.w3.org/TR/DOM-Level-3-Events/" target="_blank" rel="noopener">W3C UI Events</a> ）的，它具有类似于<code>event.stopPropagation</code>、<code>event.preventDefault</code> 这种常用的方法。</p>
+<p>我们来尝试一下，这次尝试当用户点击 <code>h1</code> 的时候，把 <code>h1</code> 的 <code>innerHTML</code> 打印出来：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Title</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  handleClickOnTitle (e) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e.target.innerHTML)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;h1 onClick=&#123;<span class="keyword">this</span>.handleClickOnTitle&#125;&gt;React 小书&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="setState-接受对象参数"><a href="#setState-接受对象参数" class="headerlink" title="setState 接受对象参数"></a>setState 接受对象参数</h2><p>在 <code>handleClickOnLikeButton</code> 事件监听函数里面，大家可以留意到，我们调用了 <code>setState</code> 函数，每次点击都会更新 <code>isLiked</code> 属性为 <code>!isLiked</code>，这样就可以做到点赞和取消功能。</p>
-<p><code>setState</code> 方法由父类 <code>Component</code> 所提供。<em>当我们调用这个函数的时候，React.js 会更新组件的状态 <code>state</code> ，并且重新调用 <code>render</code> 方法，然后再把 <code>render</code> 方法所渲染的最新的内容显示到页面上</em>。</p>
-<p>注意，当我们要改变组件的状态的时候，不能直接用 <code>this.state = xxx</code>  这种方式来修改，如果这样做 React.js 就没办法知道你修改了组件的状态，它也就没有办法更新页面。所以，一定要使用 React.js 提供的 <code>setState</code> 方法，<em>它接受一个对象或者函数作为参数</em>。</p>
-<p>传入一个对象的时候，这个对象表示该组件的新状态。但你只需要传入需要更新的部分就可以了，而不需要传入整个对象。例如，假设现在我们有另外一个状态 <code>name</code> ：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  <span class="keyword">constructor</span> (props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props)</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;</span><br><span class="line">      name: <span class="string">'Tomy'</span>,</span><br><span class="line">      isLiked: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleClickOnLikeButton () &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      isLiked: !<span class="keyword">this</span>.state.isLiked</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>再看看控制台，每次点击的时候就会打印”React 小书“。</p>
+<h2 id="关于事件中的-this"><a href="#关于事件中的-this" class="headerlink" title="关于事件中的 this"></a>关于事件中的 this</h2><p>一般在某个类的实例方法里面的 <code>this</code> 指的是这个实例本身。但是你在上面的 <code>handleClickOnTitle</code> 中把 <code>this</code> 打印出来，你会看到 <code>this</code> 是 <code>null</code> 或者 <code>undefined</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  handleClickOnTitle (e) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>) <span class="comment">// =&gt; null or undefined</span></span><br><span class="line">  &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<p>因为点击的时候我们并不需要修改 <code>name</code>，所以只需要传入 <code>isLiked</code> 就行了。Tomy 还是那个 Tomy，而 <code>isLiked</code> 已经不是那个 <code>isLiked</code> 了。</p>
-<h2 id="setState-接受函数参数"><a href="#setState-接受函数参数" class="headerlink" title="setState 接受函数参数"></a>setState 接受函数参数</h2><p>这里还有要注意的是，当你调用 <code>setState</code> 的时候，<em>React.js 并不会马上修改 state</em>。而是把这个对象放到一个更新队列里面，稍后才会从队列当中把新的状态提取出来合并到 <code>state</code> 当中，然后再触发组件更新。这一点要好好注意。可以体会一下下面的代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  handleClickOnLikeButton () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.isLiked)</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      isLiked: !<span class="keyword">this</span>.state.isLiked</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.isLiked)</span><br><span class="line">  &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这是因为 React.js 调用你所传给它的方法的时候，并不是通过对象方法的方式调用（<code>this.handleClickOnTitle</code>），而是直接通过函数调用 （<code>handleClickOnTitle</code>），所以事件监听函数内并不能通过 <code>this</code> 获取到实例。</p>
+<p>如果你想在事件函数当中使用当前的实例，你需要手动地将实例方法 <code>bind</code> 到当前实例上再传入给 React.js。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Title</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  handleClickOnTitle (e) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;h1 onClick=&#123;<span class="keyword">this</span>.handleClickOnTitle.bind(<span class="keyword">this</span>)&#125;&gt;React 小书&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<p>你会发现两次打印的都是 <code>false</code>，即使我们中间已经 <code>setState</code> 过一次了。这并不是什么 bug，只是 React.js 的 <code>setState</code> 把你的传进来的状态缓存起来，稍后才会帮你更新到 <code>state</code> 上，所以你获取到的还是原来的 <code>isLiked</code>。</p>
-<p>所以如果你想在 <code>setState</code> 之后使用新的 <code>state</code> 来做后续运算就做不到了，例如：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  handleClickOnLikeButton () &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">count</span>: <span class="number">0</span> &#125;) <span class="comment">// =&gt; this.state.count 还是 undefined</span></span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">count</span>: <span class="keyword">this</span>.state.count + <span class="number">1</span>&#125;) <span class="comment">// =&gt; undefined + 1 = NaN</span></span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">count</span>: <span class="keyword">this</span>.state.count + <span class="number">2</span>&#125;) <span class="comment">// =&gt; NaN + 2 = NaN</span></span><br><span class="line">  &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p><code>bind</code> 会把实例方法绑定到当前实例上，然后我们再把绑定后的函数传给 React.js 的 <code>onClick</code> 事件监听。这时候你再看看，点击 <code>h1</code> 的时候，就会把当前的实例打印出来：</p>
+<p><a href="http://huzidaha.github.io/static/assets/img/posts/07937EC0-AAFE-4FD5-ABB7-06A69EBF54C7.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/07937EC0-AAFE-4FD5-ABB7-06A69EBF54C7.png" alt="React.js 小书事件监听图片"></a></p>
+<p>你也可以在 <code>bind</code> 的时候给事件监听函数传入一些参数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Title</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  handleClickOnTitle (word, e) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>, word)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;h1 onClick=&#123;<span class="keyword">this</span>.handleClickOnTitle.bind(<span class="keyword">this</span>, <span class="string">'Hello'</span>)&#125;&gt;React 小书&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<p>上面的代码的运行结果并不能达到我们的预期，我们希望 <code>count</code> 运行结果是 <code>3</code> ，可是最后得到的是 <code>NaN</code>。但是这种后续操作依赖前一个 <code>setState</code> 的结果的情况并不罕见。</p>
-<p>这里就自然地引出了 <code>setState</code> 的第二种使用方式，可以接受一个函数作为参数。React.js 会把上一个 <code>setState</code> 的结果传入这个函数，你就可以使用该结果进行运算、操作，然后返回一个对象作为更新 <code>state</code> 的对象：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  handleClickOnLikeButton () &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(<span class="function">(<span class="params">prevState</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123; <span class="attr">count</span>: <span class="number">0</span> &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">this</span>.setState(<span class="function">(<span class="params">prevState</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123; <span class="attr">count</span>: prevState.count + <span class="number">1</span> &#125; <span class="comment">// 上一个 setState 的返回是 count 为 0，当前返回 1</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">this</span>.setState(<span class="function">(<span class="params">prevState</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123; <span class="attr">count</span>: prevState.count + <span class="number">2</span> &#125; <span class="comment">// 上一个 setState 的返回是 count 为 1，当前返回 3</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// 最后的结果是 this.state.count 为 3</span></span><br><span class="line">  &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>这样就可以达到上述的<em>利用上一次 <code>setState</code> 结果进行运算</em>的效果。</p>
-<h2 id="setState-合并"><a href="#setState-合并" class="headerlink" title="setState 合并"></a>setState 合并</h2><p>上面我们进行了三次 <code>setState</code>，但是实际上组件只会重新渲染一次，而不是三次；这是因为在 React.js 内部会把 JavaScript 事件循环中的消息队列的同一个消息中的 <code>setState</code> 都进行合并以后再重新渲染组件。</p>
-<p>深层的原理并不需要过多纠结，你只需要记住的是：在使用 React.js 的时候，并不需要担心多次进行 <code>setState</code> 会带来性能问题。</p>
+<p>这种 <code>bind</code> 模式在 React.js 的事件监听当中非常常见，<code>bind</code> 不仅可以帮我们把事件监听方法中的 <code>this</code> 绑定到当前组件实例上；还可以帮助我们在在渲染列表元素的时候，把列表元素传入事件监听函数当中——这个将在以后的章节提及。</p>
+<p>如果有些同学对 JavaScript 的 <code>this</code> 模式或者 <code>bind</code> 函数的使用方式不是特别了解到话，可能会对这部分内容会有些迷惑，可以补充对 JavaScript 的  <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">this</a> 和 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="noopener">bind</a> 相关的知识再来回顾这部分内容。 </p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>为 React 的组件添加事件监听是很简单的事情，你只需要使用 React.js 提供了一系列的 <code>on*</code> 方法即可。</p>
+<p>React.js 会给每个事件监听传入一个 <code>event</code> 对象，这个对象提供的功能和浏览器提供的功能一致，而且它是兼容所有浏览器的。</p>
+<p>React.js 的事件监听方法需要手动 <code>bind</code> 到当前实例，这种模式在 React.js 中非常常用。</p>
 <h2 id="课后练习"><a href="#课后练习" class="headerlink" title="课后练习"></a>课后练习</h2><ul>
-<li><a target="_blank" href="http://scriptoj.com/problems/6">不能摸的狗（二）</a></li>
+<li><a target="_blank" href="http://scriptoj.com/problems/5">不能摸的狗（一）</a></li>
 </ul>
 <hr>
 <blockquote>
@@ -1147,11 +1146,7 @@ undefined
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">state</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">setState</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">事件监听</a>
         		</li>
       		
 		</ul>
@@ -1161,7 +1156,7 @@ undefined
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/18/2017-02-21-lesson10/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/06/18/2017-02-20-lesson9/">展开全文 >></a>
         </p>
       
 
@@ -1308,19 +1303,19 @@ undefined
 
 
   
-    <article id="post-2017-02-20-lesson9" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-2017-02-21-lesson10" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/18/2017-02-20-lesson9/">事件监听</a>
+      <a class="article-title" href="/2019/06/18/2017-02-21-lesson10/">组件的 state 和 setState</a>
     </h1>
   
 
         
-        <a href="/2019/06/18/2017-02-20-lesson9/" class="archive-article-date">
+        <a href="/2019/06/18/2017-02-21-lesson10/" class="archive-article-date">
   	<time datetime="2019-06-18T15:45:21.622Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-18</time>
 </a>
         
@@ -1338,37 +1333,38 @@ undefined
   <li>转载请注明出处，保留原文链接和作者信息。</li>
 </ul>
 
-<p>在 React.js 里面监听事件是很容易的事情，你只需要给需要监听事件的元素加上属性类似于 <code>onClick</code>、<code>onKeyDown</code> 这样的属性，例如我们现在要给 <code>Title</code> 加上点击的事件监听：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Title</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  handleClickOnTitle () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Click on title.'</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;h1 onClick=&#123;<span class="keyword">this</span>.handleClickOnTitle&#125;&gt;React 小书&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="state"><a href="#state" class="headerlink" title="state"></a>state</h2><p>我们前面提到过，一个组件的显示形态是可以由它数据状态和配置参数决定的。一个组件可以拥有自己的状态，就像一个点赞按钮，可以有“已点赞”和“未点赞”状态，并且可以在这两种状态之间进行切换。React.js 的 <code>state</code> 就是用来存储这种可变化的状态的。</p>
+<p><a href="http://huzidaha.github.io/static/assets/img/posts/B7575C67-64F8-4A13-9C63-4D6805FA360D.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/B7575C67-64F8-4A13-9C63-4D6805FA360D.png" alt="React.js 小书教程图片"></a></p>
+<p>我们还是拿点赞按钮做例子，它具有已点赞和未点赞两种状态。那么就可以把这个状态存储在 state 中。修改 <code>src/index.js</code> 为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./index.css'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LikeButton</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span> () &#123;</span><br><span class="line">    <span class="keyword">super</span>()</span><br><span class="line">    <span class="keyword">this</span>.state = &#123; <span class="attr">isLiked</span>: <span class="literal">false</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleClickOnLikeButton () &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      isLiked: !<span class="keyword">this</span>.state.isLiked</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;button onClick=&#123;<span class="keyword">this</span>.handleClickOnLikeButton.bind(<span class="keyword">this</span>)&#125;&gt;</span><br><span class="line">        &#123;<span class="keyword">this</span>.state.isLiked ? <span class="string">'取消'</span> : <span class="string">'点赞'</span>&#125; 👍</span><br><span class="line">      &lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">...</span></span><br></pre></td></tr></table></figure>
 
-<p>只需要给 <code>h1</code> 标签加上 <code>onClick</code> 的事件，<code>onClick</code> 紧跟着是一个表达式插入，这个表达式返回一个 <code>Title</code> 自己的一个实例方法。当用户点击 <code>h1</code> 的时候，React.js 就会调用这个方法，所以你在控制台就可以看到 <code>Click on title.</code> 打印出来。</p>
-<p>在 React.js 不需要手动调用浏览器原生的 <code>addEventListener</code> 进行事件监听。React.js 帮我们封装好了一系列的 <code>on*</code> 的属性，当你需要为某个元素监听某个事件的时候，只需要简单地给它加上 <code>on*</code> 就可以了。而且你不需要考虑不同浏览器兼容性的问题，React.js 都帮我们封装好这些细节了。</p>
-<p>React.js 封装了不同类型的事件，这里就不一一列举，有兴趣的同学可以参考官网文档： <a href="https://facebook.github.io/react/docs/events.html#supported-events" target="_blank" rel="noopener">SyntheticEvent - React</a>，多尝试不同的事件。另外要注意的是，这些事件属性名都必须要用驼峰命名法。</p>
-<p>没有经过特殊处理的话，<em>这些 `on</em><code>的事件监听只能用在普通的 HTML 的标签上，而不能用在组件标签上*。也就是说，</code><header onclick="{…}"><code>这样的写法不会有什么效果的。这一点要注意，但是有办法可以做到这样的绑定，以后我们会提及。现在只要记住一点就可以了：这些</code>on*` 的事件监听只能用在普通的 HTML 的标签上，而不能用在组件标签上。</header></p>
-<h2 id="event-对象"><a href="#event-对象" class="headerlink" title="event 对象"></a>event 对象</h2><p>和普通浏览器一样，事件监听函数会被自动传入一个 <code>event</code>  对象，这个对象和普通的浏览器 <code>event</code> 对象所包含的方法和属性都基本一致。不同的是 React.js 中的 <code>event</code> 对象并不是浏览器提供的，而是它自己内部所构建的。React.js 将浏览器原生的 <code>event</code> 对象封装了一下，对外提供统一的 API 和属性，这样你就不用考虑不同浏览器的兼容性问题。这个 <code>event</code> 对象是符合 W3C 标准（ <a href="https://www.w3.org/TR/DOM-Level-3-Events/" target="_blank" rel="noopener">W3C UI Events</a> ）的，它具有类似于<code>event.stopPropagation</code>、<code>event.preventDefault</code> 这种常用的方法。</p>
-<p>我们来尝试一下，这次尝试当用户点击 <code>h1</code> 的时候，把 <code>h1</code> 的 <code>innerHTML</code> 打印出来：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Title</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  handleClickOnTitle (e) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e.target.innerHTML)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;h1 onClick=&#123;<span class="keyword">this</span>.handleClickOnTitle&#125;&gt;React 小书&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><code>isLiked</code> 存放在实例的 <code>state</code> 对象当中，这个对象在构造函数里面初始化。这个组件的 <code>render</code> 函数内，会根据组件的 <code>state</code> 的中的<code>isLiked</code>不同显示“取消”或“点赞”内容。并且给 <code>button</code> 加上了点击的事件监听。</p>
+<p>最后构建一个 <code>Index</code> ，在它的 <code>render</code> 函数内使用 <code>LikeButton</code> 。然后把 <code>Index</code> 渲染到页面上：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;LikeButton /&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">  &lt;Index /</span>&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 
-<p>再看看控制台，每次点击的时候就会打印”React 小书“。</p>
-<h2 id="关于事件中的-this"><a href="#关于事件中的-this" class="headerlink" title="关于事件中的 this"></a>关于事件中的 this</h2><p>一般在某个类的实例方法里面的 <code>this</code> 指的是这个实例本身。但是你在上面的 <code>handleClickOnTitle</code> 中把 <code>this</code> 打印出来，你会看到 <code>this</code> 是 <code>null</code> 或者 <code>undefined</code>。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  handleClickOnTitle (e) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>) <span class="comment">// =&gt; null or undefined</span></span><br><span class="line">  &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h2 id="setState-接受对象参数"><a href="#setState-接受对象参数" class="headerlink" title="setState 接受对象参数"></a>setState 接受对象参数</h2><p>在 <code>handleClickOnLikeButton</code> 事件监听函数里面，大家可以留意到，我们调用了 <code>setState</code> 函数，每次点击都会更新 <code>isLiked</code> 属性为 <code>!isLiked</code>，这样就可以做到点赞和取消功能。</p>
+<p><code>setState</code> 方法由父类 <code>Component</code> 所提供。<em>当我们调用这个函数的时候，React.js 会更新组件的状态 <code>state</code> ，并且重新调用 <code>render</code> 方法，然后再把 <code>render</code> 方法所渲染的最新的内容显示到页面上</em>。</p>
+<p>注意，当我们要改变组件的状态的时候，不能直接用 <code>this.state = xxx</code>  这种方式来修改，如果这样做 React.js 就没办法知道你修改了组件的状态，它也就没有办法更新页面。所以，一定要使用 React.js 提供的 <code>setState</code> 方法，<em>它接受一个对象或者函数作为参数</em>。</p>
+<p>传入一个对象的时候，这个对象表示该组件的新状态。但你只需要传入需要更新的部分就可以了，而不需要传入整个对象。例如，假设现在我们有另外一个状态 <code>name</code> ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  <span class="keyword">constructor</span> (props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props)</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;</span><br><span class="line">      name: <span class="string">'Tomy'</span>,</span><br><span class="line">      isLiked: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleClickOnLikeButton () &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      isLiked: !<span class="keyword">this</span>.state.isLiked</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<p>这是因为 React.js 调用你所传给它的方法的时候，并不是通过对象方法的方式调用（<code>this.handleClickOnTitle</code>），而是直接通过函数调用 （<code>handleClickOnTitle</code>），所以事件监听函数内并不能通过 <code>this</code> 获取到实例。</p>
-<p>如果你想在事件函数当中使用当前的实例，你需要手动地将实例方法 <code>bind</code> 到当前实例上再传入给 React.js。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Title</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  handleClickOnTitle (e) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;h1 onClick=&#123;<span class="keyword">this</span>.handleClickOnTitle.bind(<span class="keyword">this</span>)&#125;&gt;React 小书&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>因为点击的时候我们并不需要修改 <code>name</code>，所以只需要传入 <code>isLiked</code> 就行了。Tomy 还是那个 Tomy，而 <code>isLiked</code> 已经不是那个 <code>isLiked</code> 了。</p>
+<h2 id="setState-接受函数参数"><a href="#setState-接受函数参数" class="headerlink" title="setState 接受函数参数"></a>setState 接受函数参数</h2><p>这里还有要注意的是，当你调用 <code>setState</code> 的时候，<em>React.js 并不会马上修改 state</em>。而是把这个对象放到一个更新队列里面，稍后才会从队列当中把新的状态提取出来合并到 <code>state</code> 当中，然后再触发组件更新。这一点要好好注意。可以体会一下下面的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  handleClickOnLikeButton () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.isLiked)</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      isLiked: !<span class="keyword">this</span>.state.isLiked</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.isLiked)</span><br><span class="line">  &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<p><code>bind</code> 会把实例方法绑定到当前实例上，然后我们再把绑定后的函数传给 React.js 的 <code>onClick</code> 事件监听。这时候你再看看，点击 <code>h1</code> 的时候，就会把当前的实例打印出来：</p>
-<p><a href="http://huzidaha.github.io/static/assets/img/posts/07937EC0-AAFE-4FD5-ABB7-06A69EBF54C7.png" target="_blank"><img src="http://huzidaha.github.io/static/assets/img/posts/07937EC0-AAFE-4FD5-ABB7-06A69EBF54C7.png" alt="React.js 小书事件监听图片"></a></p>
-<p>你也可以在 <code>bind</code> 的时候给事件监听函数传入一些参数：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Title</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  handleClickOnTitle (word, e) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>, word)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;h1 onClick=&#123;<span class="keyword">this</span>.handleClickOnTitle.bind(<span class="keyword">this</span>, <span class="string">'Hello'</span>)&#125;&gt;React 小书&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>你会发现两次打印的都是 <code>false</code>，即使我们中间已经 <code>setState</code> 过一次了。这并不是什么 bug，只是 React.js 的 <code>setState</code> 把你的传进来的状态缓存起来，稍后才会帮你更新到 <code>state</code> 上，所以你获取到的还是原来的 <code>isLiked</code>。</p>
+<p>所以如果你想在 <code>setState</code> 之后使用新的 <code>state</code> 来做后续运算就做不到了，例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  handleClickOnLikeButton () &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">count</span>: <span class="number">0</span> &#125;) <span class="comment">// =&gt; this.state.count 还是 undefined</span></span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">count</span>: <span class="keyword">this</span>.state.count + <span class="number">1</span>&#125;) <span class="comment">// =&gt; undefined + 1 = NaN</span></span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">count</span>: <span class="keyword">this</span>.state.count + <span class="number">2</span>&#125;) <span class="comment">// =&gt; NaN + 2 = NaN</span></span><br><span class="line">  &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<p>这种 <code>bind</code> 模式在 React.js 的事件监听当中非常常见，<code>bind</code> 不仅可以帮我们把事件监听方法中的 <code>this</code> 绑定到当前组件实例上；还可以帮助我们在在渲染列表元素的时候，把列表元素传入事件监听函数当中——这个将在以后的章节提及。</p>
-<p>如果有些同学对 JavaScript 的 <code>this</code> 模式或者 <code>bind</code> 函数的使用方式不是特别了解到话，可能会对这部分内容会有些迷惑，可以补充对 JavaScript 的  <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">this</a> 和 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="noopener">bind</a> 相关的知识再来回顾这部分内容。 </p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>为 React 的组件添加事件监听是很简单的事情，你只需要使用 React.js 提供了一系列的 <code>on*</code> 方法即可。</p>
-<p>React.js 会给每个事件监听传入一个 <code>event</code> 对象，这个对象提供的功能和浏览器提供的功能一致，而且它是兼容所有浏览器的。</p>
-<p>React.js 的事件监听方法需要手动 <code>bind</code> 到当前实例，这种模式在 React.js 中非常常用。</p>
+<p>上面的代码的运行结果并不能达到我们的预期，我们希望 <code>count</code> 运行结果是 <code>3</code> ，可是最后得到的是 <code>NaN</code>。但是这种后续操作依赖前一个 <code>setState</code> 的结果的情况并不罕见。</p>
+<p>这里就自然地引出了 <code>setState</code> 的第二种使用方式，可以接受一个函数作为参数。React.js 会把上一个 <code>setState</code> 的结果传入这个函数，你就可以使用该结果进行运算、操作，然后返回一个对象作为更新 <code>state</code> 的对象：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  handleClickOnLikeButton () &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(<span class="function">(<span class="params">prevState</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123; <span class="attr">count</span>: <span class="number">0</span> &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">this</span>.setState(<span class="function">(<span class="params">prevState</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123; <span class="attr">count</span>: prevState.count + <span class="number">1</span> &#125; <span class="comment">// 上一个 setState 的返回是 count 为 0，当前返回 1</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">this</span>.setState(<span class="function">(<span class="params">prevState</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123; <span class="attr">count</span>: prevState.count + <span class="number">2</span> &#125; <span class="comment">// 上一个 setState 的返回是 count 为 1，当前返回 3</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// 最后的结果是 this.state.count 为 3</span></span><br><span class="line">  &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以达到上述的<em>利用上一次 <code>setState</code> 结果进行运算</em>的效果。</p>
+<h2 id="setState-合并"><a href="#setState-合并" class="headerlink" title="setState 合并"></a>setState 合并</h2><p>上面我们进行了三次 <code>setState</code>，但是实际上组件只会重新渲染一次，而不是三次；这是因为在 React.js 内部会把 JavaScript 事件循环中的消息队列的同一个消息中的 <code>setState</code> 都进行合并以后再重新渲染组件。</p>
+<p>深层的原理并不需要过多纠结，你只需要记住的是：在使用 React.js 的时候，并不需要担心多次进行 <code>setState</code> 会带来性能问题。</p>
 <h2 id="课后练习"><a href="#课后练习" class="headerlink" title="课后练习"></a>课后练习</h2><ul>
-<li><a target="_blank" href="http://scriptoj.com/problems/5">不能摸的狗（一）</a></li>
+<li><a target="_blank" href="http://scriptoj.com/problems/6">不能摸的狗（二）</a></li>
 </ul>
 <hr>
 <blockquote>
@@ -1399,7 +1395,11 @@ undefined
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">事件监听</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">state</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">setState</a>
         		</li>
       		
 		</ul>
@@ -1409,7 +1409,7 @@ undefined
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/18/2017-02-20-lesson9/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/06/18/2017-02-21-lesson10/">展开全文 >></a>
         </p>
       
 
@@ -1708,14 +1708,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JSX</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">JavaScript</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">安装</a>
               </li>
              
@@ -1724,7 +1716,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JSX</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">JavaScript</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">render</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">事件监听</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1736,7 +1740,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">事件监听</a>
+                <a href="javascript:void(0)" class="js-tag color1">props</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1745,10 +1749,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">评论功能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">props</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1768,15 +1768,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">容器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ref</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DOM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">容器</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1812,11 +1812,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">context</a>
+                <a href="javascript:void(0)" class="js-tag color5">高阶组件</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">高阶组件</a>
+                <a href="javascript:void(0)" class="js-tag color3">context</a>
               </li>
             
             <div class="clearfix"></div>
